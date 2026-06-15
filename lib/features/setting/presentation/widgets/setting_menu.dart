@@ -2,71 +2,30 @@ import 'package:flutter/material.dart';
 import 'setting_menu_item.dart';
 
 class SettingMenu extends StatelessWidget {
-  const SettingMenu({super.key});
+  final List<SettingMenuItem> items;
+
+  const SettingMenu({
+    super.key,
+    required this.items,
+  });
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        // Title Section
-        Row(
-          children: [
-            Container(
-              padding: const EdgeInsets.all(4),
-              child: Image.asset(
-                'assets/features/home/icons/display_and_others.webp',
-                width: 20,
-                height: 20,
-              ),
-            ),
-            // const SizedBox(width: 4),
-            Text(
-              'Display & Others',
-              style: TextStyle(
-                fontSize: 14,
-                fontWeight: FontWeight.w400,
-                color: Colors.grey.shade800,
-              ),
-            ),
-          ],
-        ),
-        const SizedBox(height: 12),
-
-        // Menu Container
-        Container(
-          decoration: BoxDecoration(
-            color: Colors.white,
-            borderRadius: BorderRadius.circular(16),
-            boxShadow: [
-              BoxShadow(
-                color: Colors.black.withOpacity(0.10),
-                blurRadius: 8,
-                offset: const Offset(0, 6),
-              ),
-            ],
+    return Container(
+      decoration: BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(16),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.black.withOpacity(0.10),
+            blurRadius: 8,
+            offset: const Offset(0, 6),
           ),
-          child: const Column(
-            children: [
-              SettingMenuItem(
-                title: 'Theme',
-                subtitle: 'Default',
-                showBorder: true,
-              ),
-              SettingMenuItem(
-                title: 'About',
-                subtitle: 'Privacy Policy and our social media info',
-                showBorder: true,
-              ),
-              SettingMenuItem(
-                title: 'Version',
-                trailingText: '3.1.84',
-                showBorder: false,
-              ),
-            ],
-          ),
-        ),
-      ],
+        ],
+      ),
+      child: Column(
+        children: items,
+      ),
     );
   }
 }

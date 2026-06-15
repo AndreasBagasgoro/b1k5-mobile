@@ -8,6 +8,11 @@ import 'package:b1k5_mobile/features/home/presentation/widgets/home_header.dart'
 import 'package:b1k5_mobile/features/home/presentation/widgets/home_tab_menu.dart';
 import 'package:b1k5_mobile/features/home/presentation/widgets/home_menu_grid.dart';
 import 'package:b1k5_mobile/features/home/presentation/widgets/home_news_promo.dart';
+import 'package:go_router/go_router.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import 'package:b1k5_mobile/core/services/api_services.dart';
+import 'package:b1k5_mobile/repositories/personalization_repository.dart';
+import 'package:b1k5_mobile/features/qris/presentation/pages/main_qris.dart';
 // import 'package:b1k5_mobile/features/home/presentation/widgets/home_login_card.dart';
 
 class UserHomePage extends StatefulWidget {
@@ -19,6 +24,70 @@ class UserHomePage extends StatefulWidget {
 
 class _UserHomePageState extends State<UserHomePage> {
   String _selectedTab = 'For You';
+  List<RecommendationItem> _recommendations = [];
+
+  @override
+  void initState() {
+    super.initState();
+    _recommendations = _getRecommendationsForSegment('');
+    _fetchPersonalization();
+  }
+
+  Future<void> _fetchPersonalization() async {
+    try {
+      final prefs = await SharedPreferences.getInstance();
+      final customerId = prefs.getString('customer_id');
+
+      if (customerId != null) {
+        final repo = PersonalizationRepository(ApiService());
+        final personalization = await repo.getPersonalization(customerId);
+        final segmentName = personalization.homepage.segment?.name ?? '';
+
+        if (mounted) {
+          setState(() {
+            _recommendations = _getRecommendationsForSegment(segmentName);
+          });
+        }
+      }
+    } catch (e) {
+      // Keep default recommendations on error
+    }
+  }
+
+  List<RecommendationItem> _getRecommendationsForSegment(String segment) {
+    switch (segment) {
+      case 'digital_spender':
+        return [
+          RecommendationItem(title: 'Transfer', icon: LucideIcons.send, onTap: () => context.push('/Transfer')),
+          RecommendationItem(title: 'QRIS Tap', icon: LucideIcons.scanLine, onTap: () => Navigator.push(context, MaterialPageRoute(builder: (_) => const MainQris()))),
+          RecommendationItem(title: 'Bills & Top Up', icon: LucideIcons.trendingUp, onTap: () => context.push('/BillAndTopUp')),
+          RecommendationItem(title: 'Electronic Card', icon: LucideIcons.creditCard, onTap: () => context.push('/ElectronicCard')),
+        ];
+      case 'bill_payer':
+        return [
+          RecommendationItem(title: 'Bills & Top Up', icon: LucideIcons.trendingUp, onTap: () => context.push('/BillAndTopUp')),
+          RecommendationItem(title: 'Saving & Deposit', icon: LucideIcons.shieldCheck, onTap: () => context.push('/Saving')),
+          RecommendationItem(title: 'My Schedule', icon: LucideIcons.landmark, onTap: () => context.push('/MySchedule')),
+        ];
+      case 'investor':
+        return [
+          RecommendationItem(title: 'Investment', icon: LucideIcons.pieChart, onTap: () => context.push('/Investment')),
+          RecommendationItem(title: 'Saving & Deposit', icon: LucideIcons.shieldCheck, onTap: () => context.push('/Saving')),
+        ];
+      case 'low_activity':
+        return [
+          RecommendationItem(title: 'Electronic Card', icon: LucideIcons.creditCard, onTap: () => context.push('/ElectronicCard')),
+          RecommendationItem(title: 'QRIS Tap', icon: LucideIcons.scanLine, onTap: () => Navigator.push(context, MaterialPageRoute(builder: (_) => const MainQris()))),
+          RecommendationItem(title: 'Bills & Top Up', icon: LucideIcons.trendingUp, onTap: () => context.push('/BillAndTopUp')),
+        ];
+      default:
+        return [
+          RecommendationItem(title: 'Bill & Top Up', icon: LucideIcons.trendingUp, onTap: () => context.push('/BillAndTopUp')),
+          RecommendationItem(title: 'Saving & Deposit', icon: LucideIcons.shieldCheck, onTap: () => context.push('/Saving')),
+          RecommendationItem(title: 'My Schedule', icon: LucideIcons.landmark, onTap: () => context.push('/MySchedule')),
+        ];
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -60,23 +129,7 @@ class _UserHomePageState extends State<UserHomePage> {
                             HomeRecommendation(
                               title: 'Recommendation',
                               subtitle: 'Specially curated just for you',
-                              items: [
-                                RecommendationItem(
-                                  title: 'Bill & Top Up',
-                                  icon: LucideIcons.trendingUp,
-                                  onTap: () {},
-                                ),
-                                RecommendationItem(
-                                  title: 'Saving & Deposit',
-                                  icon: LucideIcons.shieldCheck,
-                                  onTap: () {},
-                                ),
-                                RecommendationItem(
-                                  title: 'My Schedule',
-                                  icon: LucideIcons.landmark,
-                                  onTap: () {},
-                                ),
-                              ],
+                              items: _recommendations,
                             ),
                             SizedBox(height: 24),
                             HomeTabMenu(

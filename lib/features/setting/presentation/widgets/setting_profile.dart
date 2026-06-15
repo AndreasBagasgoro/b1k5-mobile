@@ -40,6 +40,10 @@ class _SettingProfileState extends State<SettingProfile> {
     }
   }
 
+  void _handleLogin() {
+    context.push('/Login');
+  }
+
   @override
   Widget build(BuildContext context) {
     return Column(
@@ -77,16 +81,7 @@ class _SettingProfileState extends State<SettingProfile> {
             borderRadius: BorderRadius.circular(100),
           ),
           child: ElevatedButton(
-            onPressed: () {
-              if (_isLoggedIn) {
-                _handleLogout();
-              } else {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (context) => const LoginScreen()),
-                );
-              }
-            },
+            onPressed: _isLoggedIn ? _handleLogout : _handleLogin,
             style: ElevatedButton.styleFrom(
               backgroundColor: Colors.transparent,
               foregroundColor: Colors.white,

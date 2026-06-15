@@ -13,6 +13,7 @@ import 'package:b1k5_mobile/features/electronic_card/presentation/pages/main_ele
 import 'package:b1k5_mobile/features/saving/presentation/pages/main_saving.dart';
 import 'package:b1k5_mobile/features/my_schedule/presentation/pages/main_my_schedule.dart';
 import 'package:b1k5_mobile/features/investment/presentation/pages/main_invesment.dart';
+import 'package:b1k5_mobile/features/setting/presentation/pages/user_setting.dart';
 import 'package:b1k5_mobile/shared/widgets/button/navbar.dart';
 
 Future<void> main() async {
@@ -59,6 +60,10 @@ final GoRouter _router = GoRouter(
     GoRoute(
       path: '/Wealth',
       builder: (context, state) => const WealthPage(),
+    ),
+    GoRoute(
+      path: '/Setting',
+      builder: (context, state) => const UserSettingPage(),
     ),
     GoRoute(
       path: '/OnBoarding',
