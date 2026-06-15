@@ -43,6 +43,18 @@ class HomeLoginCard extends StatelessWidget {
                   fit: BoxFit.contain,
                 ),
               ),
+              Positioned(
+                right: 0,
+                top: 0,
+                bottom: 0,
+                child: Opacity(
+                  opacity: 0.8, // Adjust if needed
+                  child: Image.asset(
+                    'assets/features/home/images/texture_login_card.webp',
+                    fit: BoxFit.fitHeight,
+                  ),
+                ),
+              ),
               Padding(
                 padding: const EdgeInsets.only(left: 64, right: 24, top: 20, bottom: 20),
                 child: Row(

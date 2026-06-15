@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:b1k5_mobile/shared/widgets/input/search_bar.dart';
+import 'package:b1k5_mobile/features/bill_and_top_up/presentation/widgets/e_wallet.dart';
 
 class BillAndTopUpMenu extends StatefulWidget {
   const BillAndTopUpMenu({super.key});
@@ -13,16 +14,8 @@ class _BillAndTopUpMenuState extends State<BillAndTopUpMenu> {
 
   @override
   Widget build(BuildContext context) {
-    return Expanded(
-      child: Container(
-        width: double.infinity,
-        decoration: const BoxDecoration(
-          color: Colors.white,
-          borderRadius: BorderRadius.only(
-            topLeft: Radius.circular(30),
-            topRight: Radius.circular(30),
-          ),
-        ),
+    return Container(
+      width: double.infinity,
         child: Column(
           children: [
             const SizedBox(height: 24),
@@ -43,15 +36,10 @@ class _BillAndTopUpMenuState extends State<BillAndTopUpMenu> {
             ),
             const SizedBox(height: 24),
             // Features Grid
-            Expanded(
-              child: SingleChildScrollView(
-                child: _BillAndTopUpMenuGrid(selectedTab: _selectedTab),
-              ),
-            ),
+            _BillAndTopUpMenuGrid(selectedTab: _selectedTab),
           ],
         ),
-      ),
-    );
+      );
   }
 }
 
@@ -104,36 +92,23 @@ class _BillAndTopUpTabMenu extends StatelessWidget {
   }
 }
 
-// ----------------------------------------------------------------------
-// Internal Widget untuk Menu Grid
-// ----------------------------------------------------------------------
-class _MenuItemData {
-  final String label;
-  final String category;
-  final VoidCallback onPressed;
 
-  _MenuItemData({
-    required this.label,
-    required this.category,
-    required this.onPressed,
-  });
-}
 
 class _BillAndTopUpMenuGrid extends StatelessWidget {
   final String selectedTab;
 
   const _BillAndTopUpMenuGrid({required this.selectedTab});
 
-  Widget _buildMenuIcon(_MenuItemData item) {
+  Widget _buildMenuIcon(Map<String, dynamic> item) {
     return GestureDetector(
-      onTap: item.onPressed,
+      onTap: item['onPressed'],
       child: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
-          Image.asset('assets/features/home/icons/cardless.webp', height: 40, width: 40),
+          Image.asset(item['icon'] ?? 'assets/features/home/icons/cardless.webp', height: 40, width: 40),
           const SizedBox(height: 8),
           Text(
-            item.label,
+            item['label'],
             textAlign: TextAlign.center,
             style: const TextStyle(fontSize: 10, fontWeight: FontWeight.w500, height: 1.2),
           ),
@@ -159,25 +134,41 @@ class _BillAndTopUpMenuGrid extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final List<_MenuItemData> allItems = [
-      _MenuItemData(label: 'Wallet', category: 'Top Up', onPressed: () {
-        print("Tap Wallet");
-        // context.go('/BillAndTopUpWallet');
-      }),
-      _MenuItemData(label: 'Phone/Mobile', category: 'Top Up', onPressed: () {}),
-      _MenuItemData(label: 'TAX', category: 'Bill Payment', onPressed: () {}),
-      _MenuItemData(label: 'PAM/PDAM', category: 'Bill Payment', onPressed: () {}),
-      _MenuItemData(label: 'e-Commerce\n& Payment', category: 'Others', onPressed: () {}),
-      _MenuItemData(label: 'Electricity', category: 'Bill Payment', onPressed: () {}),
-      _MenuItemData(label: 'Investment', category: 'Others', onPressed: () {}),
-      _MenuItemData(label: 'Virtual\nAccount', category: 'Top Up', onPressed: () {}),
-      _MenuItemData(label: 'Internet /\nCable TV', category: 'Bill Payment', onPressed: () {}),
-      _MenuItemData(label: 'BPJS', category: 'Bill Payment', onPressed: () {}),
+    final List<Map<String, dynamic>> allItems = [
+      {
+        'label': 'Wallet',
+        'category': 'Top Up',
+        'icon': 'assets/features/bills_top_up/icons/wallet.webp',
+        'onPressed': () {
+          showModalBottomSheet(
+            context: context,
+            isScrollControlled: true,
+            backgroundColor: Colors.transparent,
+            builder: (context) => Container(
+              height: MediaQuery.of(context).size.height * 0.7,
+              decoration: const BoxDecoration(
+                color: Colors.white,
+                borderRadius: BorderRadius.vertical(top: Radius.circular(24)),
+              ),
+              child: const EWallet(),
+            ),
+          );
+        }
+      },
+      {'label': 'Phone/Mobile', 'category': 'Top Up', 'icon': 'assets/features/bills_top_up/icons/phone.webp', 'onPressed': () {}},
+      {'label': 'TAX', 'category': 'Bill Payment', 'icon': 'assets/features/bills_top_up/icons/tax.webp', 'onPressed': () {}},
+      {'label': 'PAM/PDAM', 'category': 'Bill Payment', 'icon': 'assets/features/bills_top_up/icons/pam_pdam.webp', 'onPressed': () {}},
+      {'label': 'e-Commerce\n& Payment', 'category': 'Others', 'icon': 'assets/features/bills_top_up/icons/e_commerce.webp', 'onPressed': () {}},
+      {'label': 'Electricity', 'category': 'Bill Payment', 'icon': 'assets/features/bills_top_up/icons/electricity.webp', 'onPressed': () {}},
+      {'label': 'Investment', 'category': 'Others', 'icon': 'assets/features/bills_top_up/icons/investment.webp', 'onPressed': () {}},
+      {'label': 'Virtual\nAccount', 'category': 'Top Up', 'icon': 'assets/features/bills_top_up/icons/virtual_account.webp', 'onPressed': () {}},
+      {'label': 'Internet /\nCable TV', 'category': 'Bill Payment', 'icon': 'assets/features/bills_top_up/icons/internet.webp', 'onPressed': () {}},
+      {'label': 'BPJS', 'category': 'Bill Payment', 'icon': 'assets/features/bills_top_up/icons/bpjs.webp', 'onPressed': () {}},
     ];
 
     final filteredItems = selectedTab == 'All'
         ? allItems
-        : allItems.where((item) => item.category == selectedTab).toList();
+        : allItems.where((item) => item['category'] == selectedTab).toList();
 
     List<Widget> rows = [];
     for (int i = 0; i < filteredItems.length; i += 5) {

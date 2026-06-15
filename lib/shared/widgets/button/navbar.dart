@@ -1,3 +1,4 @@
+import 'package:b1k5_mobile/features/setting/presentation/pages/guest_setting.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:go_router/go_router.dart';
@@ -5,8 +6,9 @@ import 'package:b1k5_mobile/features/home/presentation/pages/user_home.dart';
 import 'package:b1k5_mobile/features/home/presentation/pages/guest_home.dart';
 import 'package:b1k5_mobile/features/my_account/presentation/pages/my_account.dart';
 import 'package:b1k5_mobile/features/wealth/presentation/pages/wealth.dart';
-import 'package:b1k5_mobile/features/setting/presentation/pages/setting.dart';
+import 'package:b1k5_mobile/features/setting/presentation/pages/user_setting.dart';
 import 'package:b1k5_mobile/features/qris/presentation/pages/main_qris.dart';
+import 'package:b1k5_mobile/features/auth/presentation/pages/login_screen.dart';
 
 class MainNavbar extends StatefulWidget {
   const MainNavbar({super.key});
@@ -48,13 +50,13 @@ class _MainNavbarState extends State<MainNavbar> {
         _isLoggedIn ? const UserHomePage() : const GuestHomePage(),
         const MyAccountPage(),
         const WealthPage(),
-        const SettingPage(),
+        _isLoggedIn ? const UserSettingPage() : const GuestSettingPage(),
       ];
 
   void _onItemTapped(int index) {
     // Middleware / Auth guard logic
-    // Jika belum login dan mencoba klik menu selain Home (index 0), arahkan ke Login
-    if (!_isLoggedIn && index != 0) {
+    // Jika belum login dan mencoba klik menu selain Home (index 0) dan Setting (index 3), arahkan ke Login
+    if (!_isLoggedIn && index != 0 && index != 3) {
       context.push('/Login');
       return;
     }
@@ -81,7 +83,7 @@ class _MainNavbarState extends State<MainNavbar> {
           Navigator.push(
             context,
             MaterialPageRoute(
-              builder: (context) => const MainQris(),
+              builder: (context) => _isLoggedIn ? const MainQris() : const LoginScreen(),
             ),
           );
         },

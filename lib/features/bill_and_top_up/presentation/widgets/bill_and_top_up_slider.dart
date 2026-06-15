@@ -1,14 +1,15 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 
-class HomeNewsPromo extends StatefulWidget {
-  const HomeNewsPromo({super.key});
+class BillAndTopUpSlider extends StatefulWidget {
+  const BillAndTopUpSlider({super.key});
 
   @override
-  State<HomeNewsPromo> createState() => _HomeNewsPromoState();
+  State<BillAndTopUpSlider> createState() => _BillAndTopUpSliderState();
 }
 
-class _HomeNewsPromoState extends State<HomeNewsPromo> {
+class _BillAndTopUpSliderState extends State<BillAndTopUpSlider> {
   String _selectedTab = 'All';
   final ScrollController _scrollController = ScrollController();
   Timer? _timer;
@@ -50,49 +51,63 @@ class _HomeNewsPromoState extends State<HomeNewsPromo> {
     });
   }
 
-  Widget _buildNewsTab(String label) {
-    bool isSelected = _selectedTab == label;
-    return GestureDetector(
-      onTap: () {
-        setState(() {
-          _selectedTab = label;
-        });
-      },
-      child: Container(
-        padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 6),
-        decoration: BoxDecoration(
-          color: isSelected ? const Color(0xFF910A19).withOpacity(0.1) : Colors.transparent,
-          borderRadius: BorderRadius.circular(20),
-        ),
-        child: Text(
-          label,
-          style: TextStyle(
-            color: isSelected ? const Color(0xFF910A19) : Colors.grey,
-            fontWeight: isSelected ? FontWeight.bold : FontWeight.w500,
-            fontSize: 13,
-          ),
-        ),
-      ),
-    );
-  }
+  // Widget _buildNewsTab(String label) {
+  //   bool isSelected = _selectedTab == label;
+  //   return GestureDetector(
+  //     onTap: () {
+  //       setState(() {
+  //         _selectedTab = label;
+  //       });
+  //     },
+  //     child: Container(
+  //       padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 6),
+  //       decoration: BoxDecoration(
+  //         color: isSelected ? const Color(0xFF910A19).withOpacity(0.1) : Colors.transparent,
+  //         borderRadius: BorderRadius.circular(20),
+  //       ),
+  //       child: Text(
+  //         label,
+  //         style: TextStyle(
+  //           color: isSelected ? const Color(0xFF910A19) : Colors.grey,
+  //           fontWeight: isSelected ? FontWeight.bold : FontWeight.w500,
+  //           fontSize: 13,
+  //         ),
+  //       ),
+  //     ),
+  //   );
+  // }
 
   Widget _buildNewsCard(String imagePath) {
+    bool isSvg = imagePath.toLowerCase().endsWith('.svg');
+
     return Container(
       width: 360,
       decoration: BoxDecoration(
         color: Colors.grey.shade200,
         borderRadius: BorderRadius.circular(12),
-        image: DecorationImage(
-          image: AssetImage(imagePath),
-          fit: BoxFit.cover,
-        ),
         boxShadow: [
           BoxShadow(
             color: Colors.black.withOpacity(0.05),
             blurRadius: 5,
             offset: const Offset(0, 2),
           )
-        ]
+        ],
+      ),
+      child: ClipRRect(
+        borderRadius: BorderRadius.circular(12),
+        child: isSvg
+            ? SvgPicture.asset(
+                imagePath,
+                fit: BoxFit.cover,
+                width: double.infinity,
+                height: double.infinity,
+              )
+            : Image.asset(
+                imagePath,
+                fit: BoxFit.cover,
+                width: double.infinity,
+                height: double.infinity,
+              ),
       ),
     );
   }
@@ -102,44 +117,20 @@ class _HomeNewsPromoState extends State<HomeNewsPromo> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        const Padding(
-          padding: EdgeInsets.symmetric(horizontal: 20),
-          child: Text(
-            'News & Promotion',
-            style: TextStyle(
-              fontSize: 18,
-              fontWeight: FontWeight.bold,
-            ),
-          ),
-        ),
-        const SizedBox(height: 16),
-        Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 20),
-          child: Row(
-            children: [
-              _buildNewsTab('All'),
-              const SizedBox(width: 24),
-              _buildNewsTab('Promo'),
-              const SizedBox(width: 24),
-              _buildNewsTab('News'),
-            ],
-          ),
-        ),
-        const SizedBox(height: 20),
         SizedBox(
-          height: 180,
+          height: 120,
           child: ListView(
             controller: _scrollController,
             scrollDirection: Axis.horizontal,
             padding: const EdgeInsets.symmetric(horizontal: 20),
             children: [
-              _buildNewsCard('assets/features/home/images/news_1.png'),
+              _buildNewsCard('assets/features/bills_top_up/images/news_1.webp'),
               const SizedBox(width: 16),
-              _buildNewsCard('assets/features/home/images/news_2.png'),
+              _buildNewsCard('assets/features/bills_top_up/images/news_2.webp'),
               const SizedBox(width: 16),
-              _buildNewsCard('assets/features/home/images/news_2.png'),
+              _buildNewsCard('assets/features/bills_top_up/images/news_3.webp'),
               const SizedBox(width: 16),
-              _buildNewsCard('assets/features/home/images/news_2.png'),
+              _buildNewsCard('assets/features/bills_top_up/images/news_4.webp'),
             ],
           ),
         ),

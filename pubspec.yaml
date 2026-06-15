@@ -86,6 +86,10 @@ flutter:
     - assets/features/auth/images/
     - assets/features/my_account/icons/
     - assets/features/my_account/images/
+    - assets/features/bills_top_up/images/
+    - assets/features/bills_top_up/icons/
+    - assets/features/electronic_card/icons/
+    - assets/features/my_schedule/images/
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/to/resolution-aware-images

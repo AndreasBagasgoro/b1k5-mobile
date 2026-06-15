@@ -87,7 +87,9 @@ class HomeMenuGrid extends StatelessWidget {
         asset: 'assets/features/home/icons/electronic_card.webp',
         label: 'Electronic\nCard',
         category: 'Products',
-        onPressed: () {},
+        onPressed: () {
+          context.push('/ElectronicCard');
+        },
       ),
       MenuItemData(
         asset: 'assets/features/home/icons/verify_with_octo.webp',
@@ -99,13 +101,17 @@ class HomeMenuGrid extends StatelessWidget {
         asset: 'assets/features/home/icons/my_schedule.webp',
         label: 'My\nSchedule',
         category: 'Others',
-        onPressed: () {},
+        onPressed: () {
+          context.push('/MySchedule');
+        },
       ),
       MenuItemData(
         asset: 'assets/features/home/icons/investment.webp',
         label: 'Investment',
         category: 'Products',
-        onPressed: () {},
+        onPressed: () {
+          context.push('/Investment');
+        },
       ),
       MenuItemData(
         asset: 'assets/features/home/icons/promo_code.webp',
@@ -117,7 +123,9 @@ class HomeMenuGrid extends StatelessWidget {
         asset: 'assets/features/home/icons/savings_and_deposit.webp',
         label: 'Savings\n& Deposit',
         category: 'Products',
-        onPressed: () {},
+        onPressed: () {
+          context.push('/Saving');
+        },
       ),
     ];
 

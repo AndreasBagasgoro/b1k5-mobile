@@ -30,6 +30,7 @@ class HomeRecommendation extends StatelessWidget {
       padding: const EdgeInsets.symmetric(horizontal: 24.0),
       child: Container(
         padding: const EdgeInsets.all(16.0),
+        width: double.infinity,
         decoration: BoxDecoration(
           color: Colors.white,
           borderRadius: BorderRadius.circular(16),
@@ -55,22 +56,32 @@ class HomeRecommendation extends StatelessWidget {
             ),
           ),
           const SizedBox(height: 16),
-          Row(
-            children: items.asMap().entries.map((entry) {
-              int idx = entry.key;
-              RecommendationItem item = entry.value;
-              
-              // Widget card dibungkus Expanded agar membagi sisa layar sama rata
-              Widget cardWidget = Expanded(
-                child: _buildRecommendationCard(item),
+          LayoutBuilder(
+            builder: (context, constraints) {
+              // Hitung lebar agar ukuran card konsisten berdasarkan ukuran jika memuat 3 card (2 gap = 32)
+              double cardWidth = (constraints.maxWidth - 32) / 3;
+
+              return SingleChildScrollView(
+                scrollDirection: Axis.horizontal,
+                child: Row(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: items.asMap().entries.map((entry) {
+                    int idx = entry.key;
+                    RecommendationItem item = entry.value;
+                    
+                    Widget cardWidget = SizedBox(
+                      width: cardWidth,
+                      child: _buildRecommendationCard(item),
+                    );
+                    
+                    if (idx < items.length - 1) {
+                      return [cardWidget, const SizedBox(width: 16)];
+                    }
+                    return [cardWidget];
+                  }).expand((element) => element).toList(),
+                ),
               );
-              
-              // Tambahkan SizedBox sebagai pemisah jika bukan elemen terakhir
-              if (idx < items.length - 1) {
-                return [cardWidget, const SizedBox(width: 16)];
-              }
-              return [cardWidget];
-            }).expand((element) => element).toList(),
+            },
           ),
         ],
       ),

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:b1k5_mobile/features/bill_and_top_up/presentation/pages/bill_and_top_up_header.dart';
-import 'package:b1k5_mobile/features/bill_and_top_up/presentation/pages/bill_and_top_up_menu.dart';
+import 'package:b1k5_mobile/features/bill_and_top_up/presentation/widgets/bill_and_top_up_header.dart';
+import 'package:b1k5_mobile/features/bill_and_top_up/presentation/widgets/bill_and_top_up_menu.dart';
+import 'package:b1k5_mobile/features/bill_and_top_up/presentation/widgets/bill_and_top_up_slider.dart';
 
 class MainBillAndTopUp extends StatefulWidget {
   const MainBillAndTopUp({super.key});
@@ -37,11 +38,22 @@ class _MainBillAndTopUpState extends State<MainBillAndTopUp> {
   @override
   Widget build(BuildContext context) {
     return const Scaffold(
-      backgroundColor: Color(0xFF910A19), // Match header background color behind the white rounded container
+      backgroundColor: Colors.white, // Sesuaikan dengan MainTransfer
       body: Column(
         children: [
-          BillAndTopUpHeader(),
-          BillAndTopUpMenu(),
+          const BillAndTopUpHeader(),
+          Expanded(
+            child: SingleChildScrollView(
+              child: Column(
+                children: [
+                  const BillAndTopUpMenu(),
+                  const SizedBox(height: 24),
+                  const BillAndTopUpSlider(),
+                  const SizedBox(height: 40),
+                ],
+              ),
+            ),
+          ),
         ],
       ),
     );
