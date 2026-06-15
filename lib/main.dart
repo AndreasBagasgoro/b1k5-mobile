@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:go_router/go_router.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:b1k5_mobile/features/home/presentation/pages/user_home.dart';
 import 'package:b1k5_mobile/features/my_account/presentation/pages/my_account.dart';
 import 'package:b1k5_mobile/features/wealth/presentation/pages/wealth.dart';
@@ -25,17 +26,17 @@ Future<void> main() async {
 final GoRouter _router = GoRouter(
   initialLocation: '/',
   redirect: (context, state) async {
-    // Jika Anda ingin mengaktifkan redirect ini nantinya, Anda bisa cek SharedPreferences di sini.
-    // Saat ini di-comment atau dibiarkan dulu agar tidak menabrak logic navbar guard.
-    /*
-    const bool isLoggedIn = false;
-    final bool isGoingToLogin = state.matchedLocation == '/Login';
-    final bool isGoingToSplash = state.matchedLocation == '/';
+    final prefs = await SharedPreferences.getInstance();
+    final token = prefs.getString('token');
+    final bool isLoggedIn = token != null && token.isNotEmpty;
 
-    if (!isLoggedIn && !isGoingToLogin && !isGoingToSplash) {
+    // Rute yang bisa diakses meski belum login
+    final publicRoutes = ['/', '/Login', '/MainNavbar', '/OnBoarding'];
+    final bool isPublicRoute = publicRoutes.contains(state.matchedLocation);
+
+    if (!isLoggedIn && !isPublicRoute) {
       return '/Login';
     }
-    */
 
     return null;
   },

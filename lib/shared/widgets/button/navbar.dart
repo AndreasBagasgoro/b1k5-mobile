@@ -8,6 +8,7 @@ import 'package:b1k5_mobile/features/my_account/presentation/pages/my_account.da
 import 'package:b1k5_mobile/features/wealth/presentation/pages/wealth.dart';
 import 'package:b1k5_mobile/features/setting/presentation/pages/user_setting.dart';
 import 'package:b1k5_mobile/features/qris/presentation/pages/main_qris.dart';
+import 'package:b1k5_mobile/features/auth/presentation/pages/login_screen.dart';
 
 class MainNavbar extends StatefulWidget {
   const MainNavbar({super.key});
@@ -82,7 +83,7 @@ class _MainNavbarState extends State<MainNavbar> {
           Navigator.push(
             context,
             MaterialPageRoute(
-              builder: (context) => const MainQris(),
+              builder: (context) => _isLoggedIn ? const MainQris() : const LoginScreen(),
             ),
           );
         },
